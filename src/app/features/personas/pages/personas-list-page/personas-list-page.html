@@ -1,0 +1,14 @@
+<p-button label="Refrescar" (onClick)="reload()"></p-button>
+
+@if (isLoading()) {
+  <div>Cargando...</div>
+}
+
+@if (error()) {
+  <div>Error: {{ error() }}</div>
+}
+
+<app-table-general
+  [data]="personas()?.Result ?? []"
+  [columns]="columns">
+</app-table-general>
