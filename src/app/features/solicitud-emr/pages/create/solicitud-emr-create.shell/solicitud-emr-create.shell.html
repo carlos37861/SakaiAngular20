@@ -1,0 +1,30 @@
+<h2 class="mb-3">Registrar Solicitud de EMR</h2>
+
+<div class="flex gap-3 mb-3">
+  <span [class.font-bold]="activeIndex === 0">1. Información</span>
+  <span>→</span>
+  <span [class.font-bold]="activeIndex === 1">2. Detalle</span>
+</div>
+
+<div class="card p-3">
+  <router-outlet></router-outlet>
+</div>
+
+<div class="flex justify-content-end gap-2 mt-4">
+  <button pButton type="button" label="Cancelar" class="p-button-secondary" (click)="cancel()"></button>
+
+  <button pButton type="button" label="Atrás"
+          class="p-button-outlined"
+          [disabled]="!canGoBack"
+          (click)="back()"></button>
+
+  <button pButton type="button" label="Siguiente"
+          *ngIf="!isLastStep"
+          [disabled]="!canGoNext"
+          (click)="next()"></button>
+
+  <button pButton type="button" label="Guardar"
+          *ngIf="isLastStep"
+          [disabled]="!canSave"
+          (click)="save()"></button>
+</div>

@@ -1,0 +1,57 @@
+<form [formGroup]="state.infoForm" class="grid">
+
+  <div class="col-12 md:col-4">
+    <label class="block mb-1">Código Solicitud</label>
+    <input pInputText formControlName="codigoSolicitud" class="w-full" />
+  </div>
+
+  <div class="col-12 md:col-4">
+    <label class="block mb-1">Solicitante</label>
+    <input pInputText formControlName="solicitante" class="w-full" />
+  </div>
+
+  <div class="col-12 md:col-4">
+    <label class="block mb-1">Estado</label>
+    <input pInputText formControlName="estado" class="w-full" />
+  </div>
+
+  <div class="col-12 md:col-3">
+    <label class="block mb-1">Fecha Solicitud</label>
+    <p-datepicker formControlName="fechaSolicitud" [showIcon]="true" class="w-full"></p-datepicker>
+  </div>
+
+  <div class="col-12 md:col-3">
+    <label class="block mb-1">Zona</label>
+    <input pInputText formControlName="zona" class="w-full" />
+  </div>
+
+  <div class="col-12 md:col-3">
+    <label class="block mb-1">Tipo Disparo</label>
+    <p-select
+      formControlName="tipoDisparo"
+      [options]="tiposDisparo"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Seleccione"
+      class="w-full">
+    </p-select>
+  </div>
+
+  <div class="col-12 md:col-3">
+    <label class="block mb-1">Guardia</label>
+    <p-select
+      formControlName="guardia"
+      [options]="guardias"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Seleccione"
+      class="w-full">
+    </p-select>
+  </div>
+
+  <div class="col-12">
+    <label class="block mb-1">Observación</label>
+    <textarea pTextarea rows="5" formControlName="observacion" class="w-full"></textarea>
+  </div>
+
+</form>

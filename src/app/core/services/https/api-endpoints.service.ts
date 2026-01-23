@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class ApiEndpointsService {
-
+  private base = environment.apiBaseUrl;
+  
+  login(): string {
+    return `${this.base}usuario/userlogin`;
+  }
   // Auth
   auth = {
     login: '/auth/login',

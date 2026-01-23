@@ -1,7 +1,7 @@
 export const environment = {
     production: true,
     baseUrl: '',
-    apiBaseUrl: '',
+    apiBaseUrl: 'https://apis.laytaruma.com.pe/',
     uniqueId: '',
     token: ''
 };

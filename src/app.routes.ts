@@ -1,32 +1,30 @@
 import { Routes } from '@angular/router';
 import { AppLayout } from './app/layout/component/app.layout';
-import { AuthGuard } from './app/core/guards/auth.guard'; // si aún no lo tienes, lo creamos luego
+import { AuthGuard } from '@/core/guards/auth.guard';
 
 export const appRoutes: Routes = [
+  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
 
-    // 🔹 Rutas públicas (sin layout)
-    {
-        path: 'auth',
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./app/features/auth/auth.routes')
+        .then(m => m.AUTH_ROUTES),
+  },
+
+  {
+    path: '',
+    component: AppLayout,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'solicitudemr',
         loadChildren: () =>
-            import('./app/features/auth/auth.routes').then(m => m.AUTH_ROUTES)
-    },
+          import('./app/features/solicitud-emr/solicitud-emr.routes')
+            .then(m => m.SOLICITUDEMR_ROUTES),
+      },
+    ],
+  },
 
-    // 🔹 Rutas protegidas (todas usan AppLayout)
-    {
-        path: '',
-        component: AppLayout,
-        //canActivate: [AuthGuard],   // si no lo has creado, lo hacemos después
-        children: [
-             // ⭐ Tus Features
-            {
-                path: 'personas',
-                loadChildren: () =>
-                    import('./app/features/personas/personas.routes')
-                    .then(m => m.PERSONAS_ROUTES)
-            }
-        ]
-    },
-
-    // Fallback
-    { path: '**', redirectTo: 'auth/login' }
+  { path: '**', redirectTo: 'auth/login' },
 ];
