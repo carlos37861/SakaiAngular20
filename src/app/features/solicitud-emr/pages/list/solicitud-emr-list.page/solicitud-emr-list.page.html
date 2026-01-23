@@ -1,1 +1,92 @@
-<p>solicitud-emr-list.page works!</p>
+<app-search-page-layout title="Solicitudes de EMR">
+
+  <!-- FILTROS -->
+  <div filters>
+    <form [formGroup]="filtrosForm" class="grid align-items-end">
+
+      <div class="col-12 md:col-3">
+        <label class="block mb-1">Código Solicitud</label>
+        <input pInputText class="w-full" formControlName="codigo" />
+      </div>
+
+      <div class="col-12 md:col-3">
+        <label class="block mb-1">Zona</label>
+        <input pInputText class="w-full" formControlName="zona" />
+      </div>
+
+      <div class="col-12 md:col-3">
+        <label class="block mb-1">Desde</label>
+        <p-datepicker class="w-full" [showIcon]="true" formControlName="desde"></p-datepicker>
+      </div>
+
+      <div class="col-12 md:col-3">
+        <label class="block mb-1">Hasta</label>
+        <p-datepicker class="w-full" [showIcon]="true" formControlName="hasta"></p-datepicker>
+      </div>
+
+      <div class="col-12 md:col-3">
+        <label class="block mb-1">Estado</label>
+        <p-select
+          class="w-full"
+          [options]="estados"
+          optionLabel="label"
+          optionValue="value"
+          formControlName="estado"
+          placeholder="Seleccione">
+        </p-select>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- BOTONES -->
+  <div actions>
+    <button pButton type="button" label="Buscar" (click)="buscar()"></button>
+    <button pButton type="button" label="Limpiar" class="p-button-outlined" (click)="limpiar()"></button>
+    <button pButton type="button" label="Crear Solicitud" class="p-button-secondary" (click)="crearSolicitud()"></button>
+    <button pButton type="button" label="Excel" class="p-button-warning" (click)="exportExcel()"></button>
+  </div>
+
+  <!-- TABLA -->
+  <div table>
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th class="text-left p-2">Código Solicitud</th>
+          <th class="text-left p-2">Fecha</th>
+          <th class="text-left p-2">Zona</th>
+          <th class="text-left p-2">Guardia</th>
+          <th class="text-left p-2">Labor</th>
+          <th class="text-left p-2">Tipo Disparo</th>
+          <th class="text-left p-2">N° de Máquina</th>
+          <th class="text-left p-2">Opciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let r of rows" class="border-top-1 surface-border">
+          <td class="p-2">{{ r.codigo }}</td>
+          <td class="p-2">{{ r.fecha }}</td>
+          <td class="p-2">{{ r.zona }}</td>
+          <td class="p-2">{{ r.guardia }}</td>
+          <td class="p-2">{{ r.labor }}</td>
+          <td class="p-2">{{ r.tipoDisparo }}</td>
+          <td class="p-2">{{ r.maquina }}</td>
+
+          <td class="p-2">
+            <div class="flex gap-2">
+              <button pButton type="button" icon="pi pi-eye" class="p-button-text" (click)="ver(r)"></button>
+              <button pButton type="button" icon="pi pi-pencil" class="p-button-text" (click)="editar(r)"></button>
+              <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-danger" (click)="eliminar(r)"></button>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="rows.length === 0">
+          <td colspan="8" class="p-3 text-center">Sin resultados</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</app-search-page-layout>
