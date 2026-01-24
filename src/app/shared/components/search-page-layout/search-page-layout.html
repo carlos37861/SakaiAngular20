@@ -4,22 +4,20 @@
   <div class="spl__header">
     <h2 class="spl__title">{{ title }}</h2>
     @if (subtitle) {
-    <div class="spl__subtitle">{{ subtitle }}</div>
+      <div class="spl__subtitle">{{ subtitle }}</div>
     }
   </div>
 
   <!-- Card filtros + acciones -->
   <div class="card p-3 mb-3 spl__filters">
-    <div class="grid align-items-end">
-
-      <div class="col-12 md:col-9 spl__filters-slot">
+    <div class="spl__bar">
+      <div class="spl__filters-slot">
         <ng-content select="[filters]"></ng-content>
       </div>
 
-      <div class="col-12 md:col-3 spl__actions-slot">
+      <div class="spl__actions-slot">
         <ng-content select="[actions]"></ng-content>
       </div>
-
     </div>
   </div>
 

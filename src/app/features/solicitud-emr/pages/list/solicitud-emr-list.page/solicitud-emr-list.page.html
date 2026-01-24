@@ -1,30 +1,30 @@
 <app-search-page-layout title="Solicitudes de EMR">
 
-  <!-- FILTROS -->
+  <!-- FILTROS + ACCIONES EN LA MISMA GRILLA -->
   <div filters>
     <form [formGroup]="filtrosForm" class="grid align-items-end">
 
-      <div class="col-12 md:col-3">
+      <div class="col-12 md:col-2">
         <label class="block mb-1">Código Solicitud</label>
         <input pInputText class="w-full" formControlName="codigo" />
       </div>
 
-      <div class="col-12 md:col-3">
+      <div class="col-12 md:col-2">
         <label class="block mb-1">Zona</label>
         <input pInputText class="w-full" formControlName="zona" />
       </div>
 
-      <div class="col-12 md:col-3">
+      <div class="col-12 md:col-2">
         <label class="block mb-1">Desde</label>
         <p-datepicker class="w-full" [showIcon]="true" formControlName="desde"></p-datepicker>
       </div>
 
-      <div class="col-12 md:col-3">
+      <div class="col-12 md:col-2">
         <label class="block mb-1">Hasta</label>
         <p-datepicker class="w-full" [showIcon]="true" formControlName="hasta"></p-datepicker>
       </div>
 
-      <div class="col-12 md:col-3">
+      <div class="col-12 md:col-2">
         <label class="block mb-1">Estado</label>
         <p-select
           class="w-full"
@@ -32,20 +32,23 @@
           optionLabel="label"
           optionValue="value"
           formControlName="estado"
-          placeholder="Seleccione">
+          placeholder="Todos">
         </p-select>
+      </div>
+
+      <!-- ACCIONES A LA DERECHA (como tu 2da imagen) -->
+      <div class="col-12 md:col-2">
+        <div actions class="flex justify-content-end gap-2 w-full">
+          <button pButton type="button" label="Buscar" (click)="buscar()"></button>
+          <button pButton type="button" label="Limpiar" class="p-button-outlined" (click)="limpiar()"></button>
+          <button pButton type="button" label="Crear Solicitud" class="p-button-secondary" (click)="crearSolicitud()"></button>
+          <button pButton type="button" label="Excel" class="p-button-warning" (click)="exportExcel()"></button>
+        </div>
       </div>
 
     </form>
   </div>
 
-  <!-- BOTONES -->
-  <div actions>
-    <button pButton type="button" label="Buscar" (click)="buscar()"></button>
-    <button pButton type="button" label="Limpiar" class="p-button-outlined" (click)="limpiar()"></button>
-    <button pButton type="button" label="Crear Solicitud" class="p-button-secondary" (click)="crearSolicitud()"></button>
-    <button pButton type="button" label="Excel" class="p-button-warning" (click)="exportExcel()"></button>
-  </div>
 
   <!-- TABLA -->
   <div table>
