@@ -1,0 +1,13 @@
+.actions {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
+:host ::ng-deep .p-paginator {
+  justify-content: center;
+}

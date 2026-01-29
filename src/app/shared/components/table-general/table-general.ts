@@ -1,18 +1,28 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
+
+import { TableColumn } from '@/shared/models/table-column.model';
+import { TableAction } from '@/shared/models/table-action.model';
+
 import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-table-general',
-  standalone: true,        // ← IMPORTANTE
-  imports: [CommonModule,TableModule],
+  standalone: true,
+  imports: [NgClass, TableModule, ButtonModule, TooltipModule],
   templateUrl: './table-general.html',
-  styleUrls: ['./table-general.scss'], // ← debe ser styleUrls
+  styleUrl: './table-general.scss'
 })
-export class TableGeneralComponent {
-  @Input() columns: { field: string; header: string }[] = [];
-  @Input() data: any[] = [];
+export class TableGeneral {
+  columns = signal<TableColumn[]>([]);
+  data = signal<any[]>([]);
+  actions = signal<TableAction[]>([]);
 
-  // ⭐ NECESARIO PARA QUE NO DE ERROR
-  @Input() filters: { field: string; type: string; placeholder: string }[] = [];
+    // ✅ Paginación
+  paginator = signal(true);
+  rows = signal(10);
+  rowsPerPageOptions = signal<number[]>([10, 30, 50]);
+
 }

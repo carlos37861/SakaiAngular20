@@ -52,7 +52,7 @@ export class Login {
 
   onSubmit() {
   localStorage.setItem('FAKE_LOGIN', '1');
-  this.router.navigateByUrl('/personas');
+  this.router.navigateByUrl('/solicitudemr');
 }
 logout() {
   localStorage.removeItem('FAKE_LOGIN');

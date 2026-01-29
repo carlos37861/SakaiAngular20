@@ -1,0 +1,83 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+}
+
+[class*="col-"] {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  box-sizing: border-box;
+}
+
+/* Base: col-12 */
+.col-12 { flex: 0 0 100%; max-width: 100%; }
+
+/* sm >= 576px : col-6 (2 por fila) */
+@media (min-width: 576px) {
+  .sm\:col-6 { flex: 0 0 50%; max-width: 50%; }
+}
+
+/* lg >= 992px : col-4 (3 por fila) */
+@media (min-width: 992px) {
+  .lg\:col-4 { flex: 0 0 33.3333%; max-width: 33.3333%; }
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Botones: colores custom */
+:host ::ng-deep .btn-search.p-button {
+  background: #f5c542;       /* amarillo */
+  border-color: #f5c542;
+  color: #111;
+}
+:host ::ng-deep .btn-clear.p-button {
+  background: #6f42c1;       /* morado */
+  border-color: #6f42c1;
+  color: #fff;
+}
+:host ::ng-deep .btn-create.p-button {
+  background: #22c55e;       /* verde */
+  border-color: #22c55e;
+  color: #fff;
+}
+:host ::ng-deep .btn-excel.p-button {
+  background: #3b82f6;       /* azul */
+  border-color: #3b82f6;
+  color: #fff;
+}
+
+/* Hover (opcional) */
+:host ::ng-deep .btn-search.p-button:hover,
+:host ::ng-deep .btn-clear.p-button:hover,
+:host ::ng-deep .btn-create.p-button:hover,
+:host ::ng-deep .btn-excel.p-button:hover {
+  filter: brightness(0.95);
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Footer real */
+.filter-footer {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.filter-footer__actions {
+  display: flex;
+  justify-content: flex-end;   
+  align-items: center;
+  gap: 0.5rem;
+}

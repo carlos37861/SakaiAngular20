@@ -1,105 +1,159 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, effect, signal, viewChild, untracked } from '@angular/core';
+
+import { FiltedCard } from '@/shared/components/filted-card/filted-card';
+import { TableGeneral } from '@/shared/components/table-general/table-general';
+
+import { FilterField } from '@/shared/models/filter-field.model';
+import { TableColumn } from '@/shared/models/table-column.model';
+import { TableAction } from '@/shared/models/table-action.model';
 
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
-import { DatePickerModule } from 'primeng/datepicker';
-import { SearchPageLayout } from '@/shared/components/search-page-layout/search-page-layout';
-
-type EstadoFiltro = 'TODOS' | 'PENDIENTE' | 'APROBADO' | 'ANULADO';
-
-interface SolicitudEmrRow {
-  codigo: string;
-  fecha: string;     // puedes cambiar a Date si tu backend lo trae así
-  zona: string;
-  guardia: string;
-  labor: string;
-  tipoDisparo: string;
-  maquina: string;
-}
+import { CardModule } from 'primeng/card';
 
 @Component({
   standalone: true,
-  selector: 'app-solicitud-emr-list-page',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ButtonModule,
-    InputTextModule,
-    SelectModule,
-    DatePickerModule,
-    SearchPageLayout, 
-  ],
-  templateUrl: './solicitud-emr-list.page.html',
-  styleUrl: './solicitud-emr-list.page.scss',
+  imports: [FiltedCard, TableGeneral, ButtonModule,CardModule],
+  templateUrl: './solicitud-emr-list.page.html'
 })
 export class SolicitudEmrListPage {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
+  filterCard = viewChild(FiltedCard);
+  table = viewChild(TableGeneral);
 
-  // Form filtros
-  filtrosForm = this.fb.group({
-    codigo: [''],
-    zona: [''],
-    estado: ['TODOS' as EstadoFiltro],
-    desde: [null as Date | null],
-    hasta: [null as Date | null],
-  });
+  // --- data ---
+  rows = signal<any[]>([]);
+  filtrosActuales = signal<any>({});
 
-  estados = [
-    { label: 'Todos', value: 'TODOS' },
-    { label: 'Pendiente', value: 'PENDIENTE' },
-    { label: 'Aprobado', value: 'APROBADO' },
-    { label: 'Anulado', value: 'ANULADO' },
-  ];
+  // --- config filtros ---
+  filtersConfig = signal<FilterField[]>([
+    { key: 'codigo', label: 'Código Solicitud', type: 'text' },
+    { key: 'zona', label: 'Zona', type: 'text' },
+    { key: 'desde', label: 'Desde', type: 'date' },
+    { key: 'hasta', label: 'Hasta', type: 'date' },
+    {
+      key: 'estado',
+      label: 'Estado',
+      type: 'select',
+      options: [
+        { label: 'Todos', value: null },
+        { label: 'Activo', value: 'A' },
+        { label: 'Anulado', value: 'N' },
+      ]
+    }
+  ]);
 
-  // Data mock (luego lo reemplazas por tu service)
-  rows: SolicitudEmrRow[] = [
-    { codigo: 'EMR2025000004', fecha: '30/11/2025', zona: 'San Francisco', guardia: 'Noche', labor: 'EST 470W', tipoDisparo: 'T', maquina: 'SECAN #9' },
-    { codigo: 'EMR2025000003', fecha: '30/11/2025', zona: 'San Francisco', guardia: 'Día', labor: 'TJ 030W', tipoDisparo: 'F', maquina: 'SECAN #3' },
-    { codigo: 'EMR2025000002', fecha: '01/12/2025', zona: 'Charapos', guardia: 'Noche', labor: 'TJ 201W', tipoDisparo: 'F', maquina: 'RPN #9' },
-    { codigo: 'EMR2025000001', fecha: '01/12/2025', zona: 'Charapos', guardia: 'Día', labor: 'TJ 201W', tipoDisparo: 'T', maquina: 'RPN #8' },
-  ];
+  // --- config tabla ---
+  tableColumns = signal<TableColumn[]>([
+    { field: 'codigo', header: 'Código Solicitud' },
+    { field: 'zona', header: 'Zona' },
+    // agrega los demás cuando tengas data real
+    // { field: 'fecha', header: 'Fecha' },
+    // { field: 'guardia', header: 'Guardia' },
+  ]);
 
-  // ========= Acciones =========
+  tableActions = signal<TableAction[]>([
+    {
+      icon: 'pi pi-eye',
+      tooltip: 'Ver',
+      onClick: row => this.ver(row)
+    },
+    {
+      icon: 'pi pi-pencil',
+      tooltip: 'Editar',
+      onClick: row => this.editar(row)
+    },
+    {
+      icon: 'pi pi-trash',
+      tooltip: 'Eliminar',
+      colorClass: 'p-button-danger',
+      onClick: row => this.eliminar(row)
+    }
+  ]);
 
-  crearSolicitud() {
-    this.router.navigate(['/solicitud-emr/nuevo']);
-  }
+  constructor() {
+    // ===== Filtros: mandar config al hijo
+    effect(() => {
+      const card = this.filterCard();
+      if (!card) return;
+      card.fields.set(this.filtersConfig());
+    });
 
-  exportExcel() {
-    // Aquí luego conectas tu export real
-    console.log('Export Excel con filtros:', this.filtrosForm.getRawValue());
-  }
+    // ===== Filtros: snapshot (no buscar)
+    effect(() => {
+      const card = this.filterCard();
+      if (!card) return;
+      this.filtrosActuales.set(card.filtersChange());
+    });
 
-  buscar() {
-    // Aquí luego llamas al service y recargas la tabla
-    console.log('Buscar con filtros:', this.filtrosForm.getRawValue());
-  }
+    // ===== Buscar: solo con click
+    effect(() => {
+      const card = this.filterCard();
+      if (!card) return;
 
-  limpiar() {
-    this.filtrosForm.reset({
-      codigo: '',
-      zona: '',
-      estado: 'TODOS',
-      desde: null,
-      hasta: null,
+      card.searchClick(); // depende del click
+      const filtros = untracked(() => this.filtrosActuales());
+      this.buscar(filtros);
+    });
+
+    // ===== Tabla: inyectar config + data a TableGeneral
+    effect(() => {
+      const table = this.table();
+      if (!table) return;
+
+      table.columns.set(this.tableColumns());
+      table.actions.set(this.tableActions());
+      table.data.set(this.rows());
     });
   }
 
-  editar(row: SolicitudEmrRow) {
-    // Si luego quieres editar por wizard
-    this.router.navigate(['/solicitud-emr/editar', row.codigo]);
+  buscar(filtros: any) {
+    console.log('Buscando con:', filtros);
+
+    // mock
+    this.rows.set([
+      { codigo: 'EMR2025000004', zona: 'San Francisco' },
+      { codigo: 'EMR2025000003', zona: 'San Francisco' },
+      { codigo: 'EMR2025000004', zona: 'San Francisco' },
+      { codigo: 'EMR2025000003', zona: 'San Francisco' },
+      { codigo: 'EMR2025000004', zona: 'San Francisco' },
+      { codigo: 'EMR2025000003', zona: 'San Francisco' },
+      { codigo: 'EMR2025000004', zona: 'San Francisco' },
+      { codigo: 'EMR2025000003', zona: 'San Francisco' },
+      { codigo: 'EMR2025000004', zona: 'San Francisco' },
+      { codigo: 'EMR2025000003', zona: 'San Francisco' },
+      { codigo: 'EMR2025000004', zona: 'San Francisco' },
+      { codigo: 'EMR2025000003', zona: 'San Francisco' },
+      { codigo: 'EMR2025000004', zona: 'San Francisco' },
+      { codigo: 'EMR2025000003', zona: 'San Francisco' },
+      { codigo: 'EMR2025000004', zona: 'San Francisco' },
+      { codigo: 'EMR2025000003', zona: 'San Francisco' },
+      { codigo: 'EMR2025000004', zona: 'San Francisco' },
+      { codigo: 'EMR2025000003', zona: 'San Francisco' },
+      { codigo: 'EMR2025000004', zona: 'San Francisco' },
+      { codigo: 'EMR2025000003', zona: 'San Francisco' },
+      { codigo: 'EMR2025000004', zona: 'San Francisco' },
+      { codigo: 'EMR2025000003', zona: 'San Francisco' },
+    ]);
   }
 
-  ver(row: SolicitudEmrRow) {
-    console.log('Ver:', row);
+  abrirCrearSolicitud() {
+    // abrir modal
+    console.log('Crear Solicitud');
   }
 
-  eliminar(row: SolicitudEmrRow) {
-    console.log('Eliminar:', row);
+  exportarExcel() {
+    console.log('Exportar Excel');
+  }
+
+  // --- acciones tabla ---
+  ver(row: any) {
+    console.log('Ver', row);
+  }
+
+  editar(row: any) {
+    console.log('Editar', row);
+  }
+
+  eliminar(row: any) {
+    console.log('Eliminar', row);
   }
 }

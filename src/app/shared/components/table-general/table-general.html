@@ -1,21 +1,49 @@
 <p-table
-  [value]="data"
-  [tableStyle]="{ 'min-width': '50rem' }"
+  [value]="data()"
+  class="p-datatable-sm"
   responsiveLayout="scroll"
->
+
+  [paginator]="true"
+  [rows]="10"
+  [rowsPerPageOptions]="[10, 30, 50]"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}">
+
+  <!-- HEADER -->
   <ng-template pTemplate="header">
     <tr>
-      <th *ngFor="let col of columns">
-        {{ col.header }}
-      </th>
+      @for (col of columns(); track col.field) {
+        <th [style.width]="col.width">{{ col.header }}</th>
+      }
+      @if (actions().length) {
+        <th style="width: 120px">Opciones</th>
+      }
     </tr>
   </ng-template>
 
+  <!-- BODY -->
   <ng-template pTemplate="body" let-row>
     <tr>
-      <td *ngFor="let col of columns">
-        {{ row[col.field] }}
-      </td>
+      @for (col of columns(); track col.field) {
+        <td>{{ row[col.field] }}</td>
+      }
+
+      @if (actions().length) {
+        <td class="actions">
+          @for (action of actions(); track action.icon) {
+            <button
+              pButton
+              type="button"
+              [icon]="action.icon"
+              class="p-button-text p-button-sm"
+              [ngClass]="action.colorClass"
+              pTooltip="{{ action.tooltip }}"
+              (click)="action.onClick(row)">
+            </button>
+          }
+        </td>
+      }
     </tr>
   </ng-template>
+
 </p-table>

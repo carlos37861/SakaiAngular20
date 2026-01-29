@@ -1,0 +1,42 @@
+<div class="card p-3 w-full">
+
+  <!-- FILTROS -->
+  <form [formGroup]="formGroup" class="grid w-full">
+    @for (field of fields(); track field.key) {
+      <div class="col-12 sm:col-6 lg:col-4">
+        <label class="block mb-1">{{ field.label }}</label>
+
+        @switch (field.type) {
+          @case ('text') {
+            <input pInputText class="w-full" [formControlName]="field.key" />
+          }
+          @case ('date') {
+            <p-datepicker class="w-full" [showIcon]="true" [formControlName]="field.key"></p-datepicker>
+          }
+          @case ('select') {
+            <p-select class="w-full"
+              [options]="field.options"
+              optionLabel="label"
+              optionValue="value"
+              [formControlName]="field.key">
+            </p-select>
+          }
+        }
+      </div>
+    }
+  </form>
+
+  <!-- FOOTER FUERA DEL GRID -->
+  <div class="filter-footer">
+    <div class="filter-footer__actions">
+      <button pButton label="Limpiar" icon="pi pi-refresh"
+              class="btn-clear" (click)="onClear()"></button>
+
+      <button pButton label="Buscar" icon="pi pi-search"
+              class="btn-search" (click)="onSearch()"></button>
+
+      <ng-content select=".footer-actions"></ng-content>
+    </div>
+  </div>
+
+</div>
