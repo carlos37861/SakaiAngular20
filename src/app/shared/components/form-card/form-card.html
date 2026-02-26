@@ -1,0 +1,102 @@
+<div class="card p-3 w-full">
+
+  <form [formGroup]="formGroup" class="form-grid">
+    @for (field of fields(); track field.key) {
+      <div class="form-field">
+        <label class="block mb-1">{{ field.label }}</label>
+
+        @switch (field.type) {
+
+          @case ('text') {
+            @if (field.key === 'rgId') {
+              <div class="flex items-center gap-2">
+                <input
+                  pInputText
+                  class="w-full"
+                  [placeholder]="field.placeholder"
+                  [formControlName]="field.key" />
+
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-qrcode"
+                  class="p-button-outlined"
+                  (click)="onScan(field.key)">
+                </button>
+              </div>
+            } @else {
+              <input
+                pInputText
+                class="w-full"
+                [placeholder]="field.placeholder"
+                [formControlName]="field.key" />
+            }
+          }
+
+          @case ('date') {
+            <p-datepicker
+              class="w-full"
+              [showIcon]="true"
+              [placeholder]="field.placeholder"
+              [formControlName]="field.key">
+            </p-datepicker>
+          }
+
+          @case ('select') {
+            <p-select
+              class="w-full"
+              [options]="field.options"
+              optionLabel="label"
+              optionValue="value"
+              [formControlName]="field.key">
+            </p-select>
+          }
+
+          @case ('textarea') {
+            <textarea
+              pInputTextarea
+              class="w-full"
+              rows="4"
+              [placeholder]="field.placeholder"
+              [formControlName]="field.key">
+            </textarea>
+          }
+
+          @case ('number') {
+            <input
+              type="number"
+              pInputText
+              class="w-full"
+              [placeholder]="field.placeholder"
+              [formControlName]="field.key" />
+          }
+        }
+      </div>
+    }
+  </form>
+
+  <div class="form-footer">
+    <div class="form-footer__actions">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        class="p-button-secondary"
+        (click)="onCancel()">
+      </button>
+
+      @if (showPrimary()) {
+        <button
+          pButton
+          type="button"
+          [label]="primaryLabel()"
+          [disabled]="formGroup.invalid"
+          (click)="onSave()">
+        </button>
+      }
+
+      <!-- extras -->
+      <ng-content select=".footer-actions"></ng-content>
+    </div>
+  </div>
+</div>

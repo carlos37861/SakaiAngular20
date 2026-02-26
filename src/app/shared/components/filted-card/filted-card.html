@@ -8,7 +8,7 @@
 
         @switch (field.type) {
           @case ('text') {
-            <input pInputText class="w-full" [formControlName]="field.key" />
+            <input pInputText class="w-full" [formControlName]="field.key" [placeholder]="field.placeholder" />
           }
           @case ('date') {
             <p-datepicker class="w-full" [showIcon]="true" [formControlName]="field.key"></p-datepicker>
@@ -18,6 +18,7 @@
               [options]="field.options"
               optionLabel="label"
               optionValue="value"
+              dataKey="value"
               [formControlName]="field.key">
             </p-select>
           }
@@ -29,11 +30,12 @@
   <!-- FOOTER FUERA DEL GRID -->
   <div class="filter-footer">
     <div class="filter-footer__actions">
+      
+      <button pButton label="Buscar" icon="pi pi-search"
+              class="btn-search" (click)="onSearch()"></button>
       <button pButton label="Limpiar" icon="pi pi-refresh"
               class="btn-clear" (click)="onClear()"></button>
 
-      <button pButton label="Buscar" icon="pi pi-search"
-              class="btn-search" (click)="onSearch()"></button>
 
       <ng-content select=".footer-actions"></ng-content>
     </div>

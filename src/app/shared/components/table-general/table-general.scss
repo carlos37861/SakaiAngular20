@@ -11,3 +11,60 @@
 :host ::ng-deep .p-paginator {
   justify-content: center;
 }
+
+
+.subtable-wrap{
+  margin: .5rem 0;
+  padding: .75rem;
+  border-radius: 12px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+}
+
+.subtable-title{
+  font-weight: 700;
+  margin-bottom: .6rem;
+  color: #374151;
+}
+
+/* evita bordes feos y redondea */
+:host ::ng-deep .subtable .p-datatable-wrapper{
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* header gris oscuro tipo tu diseño */
+:host ::ng-deep .subtable .p-datatable-thead > tr > th{
+  background: #6b7280;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  padding: .75rem;
+}
+
+/* filas blancas y separadas */
+:host ::ng-deep .subtable .p-datatable-tbody > tr > td{
+  background: #fff;
+  padding: .75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* última fila sin borde */
+:host ::ng-deep .subtable .p-datatable-tbody > tr:last-child > td{
+  border-bottom: none;
+}
+
+/* centra y ordena la columna Sel */
+.th-sel, .td-sel {
+  text-align: center;
+}
+
+/* opcional: darle “feel” más pro */
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  font-weight: 700;
+}
+
+::ng-deep .p-datatable-sm .p-datatable-tbody > tr > td {
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}

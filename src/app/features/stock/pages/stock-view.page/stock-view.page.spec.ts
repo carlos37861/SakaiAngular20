@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchPageLayout } from './search-page-layout';
+import { StockViewPage } from './stock-view.page';
 
-describe('SearchPageLayout', () => {
-  let component: SearchPageLayout;
-  let fixture: ComponentFixture<SearchPageLayout>;
+describe('StockViewPage', () => {
+  let component: StockViewPage;
+  let fixture: ComponentFixture<StockViewPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearchPageLayout]
+      imports: [StockViewPage]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SearchPageLayout);
+    fixture = TestBed.createComponent(StockViewPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

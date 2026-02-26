@@ -1,0 +1,41 @@
+<h2 class="mb-3">Detalle Lote - EMR asociados</h2>
+
+<div class="mb-3">
+  <small>
+    <b>RG/ID:</b> {{ paso1?.rgId }} |
+    <b>Producto:</b> {{ paso1?.nombreProducto }} |
+    <b>Lote:</b> {{ paso1?.lote }}
+  </small>
+</div>
+
+<div class="surface-card p-4 border-round">
+  <h4 class="mb-3">Seleccione EMRs</h4>
+
+  <table class="w-full">
+    <thead>
+      <tr>
+        <th style="width: 60px;">Sel</th>
+        <th style="width: 80px;">Item</th>
+        <th style="width: 200px;">Código</th>
+        <th>Descripción</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let r of emrsDisponibles()">
+        <td>
+          <input type="checkbox" [checked]="isSelected(r.codigo)" (change)="toggle(r)" />
+        </td>
+        <td>{{ r.item }}</td>
+        <td>{{ r.codigo }}</td>
+        <td>{{ r.descripcion }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="flex justify-content-end gap-2 mt-4">
+    <button type="button" class="p-button p-button-secondary" (click)="atras()">Atrás</button>
+    <button type="button" class="p-button p-button-danger" (click)="cancelar()">Cancelar</button>
+    <button type="button" class="p-button p-button-success" (click)="finalizar()">Guardar</button>
+  </div>
+</div>

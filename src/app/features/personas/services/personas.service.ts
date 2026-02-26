@@ -2,9 +2,9 @@ import { Injectable, inject } from '@angular/core';
 
 
 import { delay, Observable, of } from 'rxjs';
-import { HttpService } from '@/core/services/https/http.service';
+import { HttpService } from '@/core/services/http/http.service';
 import { Persona } from '@/shared/models/persona.model';
-import { ApiEndpointsService } from '@/core/services/https/api-endpoints.service';
+import { ApiEndpointsService } from '@/core/services/http/api-endpoints.service';
 import { ApiResponse } from '@/shared/models/api-response.model';
 import { PersonasMockResponse } from '@/core/services/mocks/personas.mock';
 

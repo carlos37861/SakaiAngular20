@@ -25,4 +25,10 @@ export class ApiEndpointsService {
     base: '/personas',
     porCliente: '/personas/cliente/'
   };
+
+  // Catálogo
+    catalogo = {
+      base: '/catalogo',
+      buscar: '/catalogo/buscar'
+    };
 }

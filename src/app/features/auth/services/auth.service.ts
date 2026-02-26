@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 import { AuthStore } from './auth.store';
 import { ApiResponse, LoginRequest, LoginResult } from '../models/auth.models';
-import { ApiEndpointsService } from '@/core/services/https/api-endpoints.service';
+import { ApiEndpointsService } from '@/core/services/http/api-endpoints.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

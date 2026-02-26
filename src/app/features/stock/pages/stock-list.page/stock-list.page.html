@@ -1,0 +1,25 @@
+<h2 class="mb-3">Stock General de EMR</h2>
+
+<app-filted-card class="block w-full">
+  <div class="footer-actions flex gap-2">
+
+    <button
+      pButton
+      type="button"
+      class="btn-excel"
+      label="Excel"
+      icon="pi pi-file-excel"
+      (click)="exportExcel()">
+    </button>
+  </div>
+</app-filted-card>
+
+<h4 class="mt-4 mb-2">Resultado de Búsqueda</h4>
+
+<p-card>
+  <app-table-general></app-table-general>
+</p-card>
+<p-confirmDialog
+  [style]="{ width: '28rem' }"
+  [breakpoints]="{ '960px': '95vw' }">
+</p-confirmDialog>

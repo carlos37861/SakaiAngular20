@@ -1,0 +1,10 @@
+.text-muted {
+  opacity: 0.75;
+}
+
+/* inputs disabled más “readonly” */
+::ng-deep .p-inputtext:disabled {
+  opacity: 1;
+  background: #f6f7f9;
+  color: #334155;
+}

@@ -1,20 +1,27 @@
 <p-table
   [value]="data()"
+  [dataKey]="dataKey()"
+  [expandedRowKeys]="expandedRowKeys()"
+  (expandedRowKeysChange)="onExpandedRowKeysChange($event)"
   class="p-datatable-sm"
   responsiveLayout="scroll"
-
-  [paginator]="true"
-  [rows]="10"
-  [rowsPerPageOptions]="[10, 30, 50]"
+  [paginator]="paginator()"
+  [rows]="rows()"
+  [rowsPerPageOptions]="rowsPerPageOptions()"
   [showCurrentPageReport]="true"
   currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}">
 
   <!-- HEADER -->
   <ng-template pTemplate="header">
     <tr>
+      @if (expandable()) {
+        <th style="width: 40px"></th>
+      }
+
       @for (col of columns(); track col.field) {
         <th [style.width]="col.width">{{ col.header }}</th>
       }
+
       @if (actions().length) {
         <th style="width: 120px">Opciones</th>
       }
@@ -22,10 +29,39 @@
   </ng-template>
 
   <!-- BODY -->
-  <ng-template pTemplate="body" let-row>
+  <ng-template pTemplate="body" let-row let-expanded="expanded">
     <tr>
+      @if (expandable()) {
+        <td style="width:40px">
+          <button
+            pButton
+            type="button"
+            class="p-button-text p-button-sm"
+            [pRowToggler]="row"
+            [disabled]="!hasChildren(row)"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+          </button>
+        </td>
+      }
+
       @for (col of columns(); track col.field) {
-        <td>{{ row[col.field] }}</td>
+        <td>
+          @if (col.field === 'estado') {
+            <p-tag
+              [value]="row[col.field]"
+              [severity]="
+                row[col.field] === 'Disponible' ? 'success' :
+                row[col.field] === 'Vencido' ? 'danger' :
+                row[col.field] === 'Próximo a vencer' ? 'warn' :
+                row[col.field] === 'Alerta' ? 'warn' :
+                row[col.field] === 'Crítico' ? 'danger' : 'info'
+              "
+              [rounded]="false">
+            </p-tag>
+          } @else {
+            {{ row[col.field] }}
+          }
+        </td>
       }
 
       @if (actions().length) {
@@ -46,4 +82,41 @@
     </tr>
   </ng-template>
 
+
+
+<!-- EXPANSIÓN (template 2 - compatibilidad) -->
+<ng-template pTemplate="expandedrow" let-row>
+  <tr>
+    <td [attr.colspan]="getExpandColspan()">
+
+      <div class="subtable-wrap">
+   
+
+        <p-table
+          [value]="row?.[childrenField()] ?? []"
+          class="p-datatable-sm subtable"
+          responsiveLayout="scroll">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 220px">Código EMR</th>
+              <th>Descripción</th>
+              <th style="width: 160px">Tipo</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-item>
+            <tr>
+              <td>{{ item.codigo }}</td>
+              <td>{{ item.descripcion }}</td>
+              <td>{{ item.tipo }}</td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+      </div>
+
+    </td>
+  </tr>
+</ng-template>
 </p-table>

@@ -1,0 +1,26 @@
+<p-dialog
+  header="Escanear QR / Barras"
+  [visible]="visible()"
+  (visibleChange)="visible.set($event)"
+  [modal]="true"
+  [style]="{ width: '32rem' }"
+  [breakpoints]="{ '960px': '95vw' }">
+
+  <!-- ✅ clave: destruir y crear el scanner para que no quede congelado -->
+  @if (visible()) {
+    <zxing-scanner
+      [formats]="formats"
+      (scanSuccess)="onScan($event)">
+    </zxing-scanner>
+  }
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      label="Cerrar"
+      class="p-button-text"
+      (click)="close()">
+    </button>
+  </ng-template>
+</p-dialog>

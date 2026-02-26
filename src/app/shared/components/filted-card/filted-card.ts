@@ -18,7 +18,7 @@ export class FiltedCard {
   fields = signal<FilterField[]>([]);
   filtersChange = signal<any>({});
 
-  // ✅ “eventos” por signal (contador)
+  //“eventos” por signal (contador)
   searchClick = signal(0);
   clearClick = signal(0);
 
@@ -32,7 +32,13 @@ export class FiltedCard {
       if (!fields.length) return;
 
       const group: any = {};
-      fields.forEach(f => group[f.key] = ['']);
+      fields.forEach(f => {
+        if (f.type === 'select') {
+          group[f.key] = [null];   // para que muestre "Todos"
+        } else {
+          group[f.key] = [''];     // text/date vacíos
+        }
+      });
 
       this.form = this.fb.group(group);
 
