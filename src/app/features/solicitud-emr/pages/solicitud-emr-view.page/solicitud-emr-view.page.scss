@@ -1,0 +1,42 @@
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.info-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-text .info-label {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.info-text .info-value {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.info-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #eef2ff;
+}
+
+.info-icon-green {
+  background: #ecfdf5;
+}
+
+.info-icon-orange {
+  background: #fff7ed;
+}

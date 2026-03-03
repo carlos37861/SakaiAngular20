@@ -10,18 +10,20 @@ import { TableAction } from '@/shared/models/table-action.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 
-// ✅ service
+//  service
 
-import { SolicitudItem } from '@/features/solicitud-emr/interfaces/solicitudemr_item.interface';
-import { SolicitudFilter, SolicitudService } from '@/features/solicitud-emr/services/solicitud-emr.service';
+import { SolicitudEmrHeader } from '@/features/solicitud-emr/interfaces/solicitudemr_item.interface';
+import { SolicitudFilter, SolicitudEmrService } from '@/features/solicitud-emr/services/solicitud-emr.service';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
   imports: [FiltedCard, TableGeneral, ButtonModule, CardModule],
+  styleUrl: './solicitud-emr-list.page.scss',
   templateUrl: './solicitud-emr-list.page.html'
 })
 export class SolicitudEmrListPage {
-  private solicitudService = inject(SolicitudService);
+  private solicitudService = inject(SolicitudEmrService);
 
   filterCard = viewChild(FiltedCard);
   table = viewChild(TableGeneral);
@@ -32,9 +34,9 @@ export class SolicitudEmrListPage {
 
   // --- config filtros ---
   filtersConfig = signal<FilterField[]>([
-    { key: 'codigo', label: 'Código Solicitud', type: 'text' },
-    { key: 'zona', label: 'Zona', type: 'text' },
-    { key: 'desde', label: 'Desde', type: 'date' },
+    { key: 'codigo', label: 'Código Solicitud', type: 'text',placeholder:'Ingresa código' },
+    { key: 'zona', label: 'Zona', type: 'text' ,placeholder:'Zona'},
+    { key: 'desde', label: 'Desde', type: 'date'},
     { key: 'hasta', label: 'Hasta', type: 'date' },
     {
       key: 'estado',
@@ -56,10 +58,10 @@ tableColumns = signal<TableColumn[]>([
   { field: 'fechaSolicitud', header: 'Fecha Solicitud' },
   { field: 'zona', header: 'Zona' },
   { field: 'labor', header: 'Labor' },
-  { field: 'numeroTaladro', header: 'N° Taladro' },
-  { field: 'numeroMaquina', header: 'N° Máquina' },
+  { field: 'nroTaladro', header: 'N° Taladro' },
+  { field: 'nroMaquina', header: 'N° Máquina' },
   { field: 'desmonteMineral', header: 'Desmonte/Mineral' },
-  { field: 'longitudPerforacion', header: 'Long. Perforación' },
+  { field: 'longPerforacion', header: 'Long. Perforación' },
   { field: 'tipoDisparo', header: 'Tipo Disparo' },
   { field: 'turno', header: 'Turno' },
   { field: 'piesPerforados', header: 'Pies Perforados' },
@@ -77,7 +79,7 @@ tableColumns = signal<TableColumn[]>([
     }
   ]);
 
-  constructor() {
+  constructor(private router: Router) {
     effect(() => {
       const card = this.filterCard();
       if (!card) return;
@@ -109,11 +111,11 @@ tableColumns = signal<TableColumn[]>([
     });
   }
 
-  // ✅ ahora consume el service
+  //  ahora consume el service
   buscar(filtros: any) {
     console.log('Buscando con:', filtros);
 
-    // 🔁 map UI -> service filters
+    // map UI -> service filters
     const serviceFilters: SolicitudFilter = {
       // tu filtro en UI es "codigo", en el service es "codigoSolicitud"
       codigoSolicitud: (filtros?.codigo ?? '').trim() || undefined,
@@ -141,15 +143,15 @@ tableColumns = signal<TableColumn[]>([
         return;
       }
 
-      let data: SolicitudItem[] = resp.Result ?? [];
+      let data: SolicitudEmrHeader[] = resp.Result ?? [];
 
-      // ✅ filtro por zona local (mientras el service no lo haga)
+      //  filtro por zona local (mientras el service no lo haga)
       const zona = (filtros?.zona ?? '').trim().toLowerCase();
       if (zona) {
         data = data.filter(x => (x.zona ?? '').toLowerCase().includes(zona));
       }
 
-      // ✅ filtro por rango de fecha local (desde/hasta)
+      //  filtro por rango de fecha local (desde/hasta)
       const desde = filtros?.desde ? new Date(filtros.desde) : null;
       const hasta = filtros?.hasta ? new Date(filtros.hasta) : null;
 
@@ -164,7 +166,7 @@ tableColumns = signal<TableColumn[]>([
         });
       }
 
-      // ✅ adaptar a los campos que tu tabla espera (codigo/zona)
+      //  adaptar a los campos que tu tabla espera (codigo/zona)
       this.rows.set(
         data.map(x => ({
           ...x,
@@ -183,9 +185,9 @@ tableColumns = signal<TableColumn[]>([
   }
 
   ver(row: any) {
-    console.log('Ver', row);
+    const codigo = row.codigoSolicitud ?? row.codigo ?? row.CODIGO;
+    this.router.navigate(['/solicitudemr/ver', codigo]);
   }
-
   editar(row: any) {
     console.log('Editar', row);
   }

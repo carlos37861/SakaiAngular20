@@ -1,41 +1,71 @@
 <h2 class="mb-3">Detalle Lote - EMR asociados</h2>
 
-<div class="mb-3">
-  <small>
-    <b>RG/ID:</b> {{ paso1?.rgId }} |
-    <b>Producto:</b> {{ paso1?.nombreProducto }} |
-    <b>Lote:</b> {{ paso1?.lote }}
-  </small>
+<!-- CARDS INFO -->
+<div class="info-grid mb-4">
+  <div class="info-card">
+    <div class="info-text">
+      <div class="info-label">RG/ID</div>
+      <div class="info-value">{{ paso1?.rgId }}</div>
+    </div>
+    <div class="info-icon">
+      <i class="pi pi-id-card"></i>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-text">
+      <div class="info-label">Producto</div>
+      <div class="info-value">{{ paso1?.nombreProducto }}</div>
+    </div>
+    <div class="info-icon info-icon-green">
+      <i class="pi pi-box"></i>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-text">
+      <div class="info-label">Cantidad</div>
+      <div class="info-value">{{ paso1?.cantidad }}</div>
+    </div>
+    <div class="info-icon info-icon-orange">
+      <i class="pi pi-tag"></i>
+    </div>
+  </div>
+  ng serve
 </div>
+<br>
+<p-card>
+  <!-- HEADER TABLA +  BOTONES -->
+  <div class="flex align-items-center mb-3">
+  <h4 class="m-0">Seleccione EMRs</h4>
 
-<div class="surface-card p-4 border-round">
-  <h4 class="mb-3">Seleccione EMRs</h4>
+  <div class="ml-auto flex gap-2">
+    <button
+      pButton
+      type="button"
+      icon="pi pi-plus"
+      label="Agregar Material"
+      class="p-button-secondary"
+      (click)="agregarMaterial()">
+    </button>
 
-  <table class="w-full">
-    <thead>
-      <tr>
-        <th style="width: 60px;">Sel</th>
-        <th style="width: 80px;">Item</th>
-        <th style="width: 200px;">Código</th>
-        <th>Descripción</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let r of emrsDisponibles()">
-        <td>
-          <input type="checkbox" [checked]="isSelected(r.codigo)" (change)="toggle(r)" />
-        </td>
-        <td>{{ r.item }}</td>
-        <td>{{ r.codigo }}</td>
-        <td>{{ r.descripcion }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="flex justify-content-end gap-2 mt-4">
-    <button type="button" class="p-button p-button-secondary" (click)="atras()">Atrás</button>
-    <button type="button" class="p-button p-button-danger" (click)="cancelar()">Cancelar</button>
-    <button type="button" class="p-button p-button-success" (click)="finalizar()">Guardar</button>
+    <button
+      pButton
+      type="button"
+      icon="pi pi-print"
+      label="Impresión masiva"
+      class="p-button-success"
+      (click)="impresionMasiva()">
+    </button>
   </div>
 </div>
+  <!-- TABLA -->
+  <app-table-general></app-table-general>
+  <!-- FOOTER -->
+  <div class="flex justify-content-start gap-2 mt-4">
+    <button pButton type="button" class="p-button-warn" (click)="atras()">Atrás</button>
+    <button pButton type="button" class="p-button-danger" (click)="cancelar()">Cancelar</button>
+    <button pButton type="button" class="p-button-success" (click)="finalizar()">Guardar</button>
+    
+  </div>
+</p-card>

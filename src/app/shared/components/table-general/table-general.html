@@ -9,13 +9,24 @@
   [rows]="rows()"
   [rowsPerPageOptions]="rowsPerPageOptions()"
   [showCurrentPageReport]="true"
-  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}">
+  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}"
 
+  [selectionMode]="selectable() ? 'multiple' : null"
+  [metaKeySelection]="false"
+  [selection]="selection()"
+  (selectionChange)="onSelectionChange($event)"
+>
   <!-- HEADER -->
   <ng-template pTemplate="header">
     <tr>
       @if (expandable()) {
         <th style="width: 40px"></th>
+      }
+
+      @if (selectable()) {
+        <th style="width: 50px">
+          <p-tableHeaderCheckbox />
+        </th>
       }
 
       @for (col of columns(); track col.field) {
@@ -41,6 +52,12 @@
             [disabled]="!hasChildren(row)"
             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
           </button>
+        </td>
+      }
+
+      @if (selectable()) {
+        <td style="width: 50px">
+          <p-tableCheckbox [value]="row" />
         </td>
       }
 
@@ -82,41 +99,35 @@
     </tr>
   </ng-template>
 
+  <!-- EXPANSIÓN -->
+  <ng-template pTemplate="expandedrow" let-row>
+    <tr>
+      <td [attr.colspan]="getExpandColspan()">
+        <div class="subtable-wrap">
+          <p-table
+            [value]="row?.[childrenField()] ?? []"
+            class="p-datatable-sm subtable"
+            responsiveLayout="scroll">
 
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 220px">Código EMR</th>
+                <th>Descripción</th>
+                <th style="width: 160px">Tipo</th>
+              </tr>
+            </ng-template>
 
-<!-- EXPANSIÓN (template 2 - compatibilidad) -->
-<ng-template pTemplate="expandedrow" let-row>
-  <tr>
-    <td [attr.colspan]="getExpandColspan()">
+            <ng-template pTemplate="body" let-item>
+              <tr>
+                <td>{{ item.codigo }}</td>
+                <td>{{ item.descripcion }}</td>
+                <td>{{ item.tipo }}</td>
+              </tr>
+            </ng-template>
 
-      <div class="subtable-wrap">
-   
-
-        <p-table
-          [value]="row?.[childrenField()] ?? []"
-          class="p-datatable-sm subtable"
-          responsiveLayout="scroll">
-
-          <ng-template pTemplate="header">
-            <tr>
-              <th style="width: 220px">Código EMR</th>
-              <th>Descripción</th>
-              <th style="width: 160px">Tipo</th>
-            </tr>
-          </ng-template>
-
-          <ng-template pTemplate="body" let-item>
-            <tr>
-              <td>{{ item.codigo }}</td>
-              <td>{{ item.descripcion }}</td>
-              <td>{{ item.tipo }}</td>
-            </tr>
-          </ng-template>
-
-        </p-table>
-      </div>
-
-    </td>
-  </tr>
-</ng-template>
+          </p-table>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
 </p-table>

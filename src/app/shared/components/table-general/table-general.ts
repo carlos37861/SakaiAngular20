@@ -21,24 +21,33 @@ export class TableGeneral {
   data = signal<any[]>([]);
   actions = signal<TableAction[]>([]);
 
-  // ✅ expansión
-  expandable = signal(false);
-  childrenField = signal<string>('children'); // ejemplo: 'emrs'
-  dataKey = signal<string>('codigo');         // id único
+  // selección
+  selectable = signal(false);
+  selection = signal<any[]>([]);
 
-  // ✅ controlar filas expandidas
+  onSelectionChange(value: any[] | any) {
+    const arr = Array.isArray(value) ? value : (value ? [value] : []);
+    this.selection.set(arr);
+  }
+
+  // expansión
+  expandable = signal(false);
+  childrenField = signal<string>('children');
+  dataKey = signal<string>('codigo');
+
   expandedRowKeys = signal<Record<string, boolean>>({});
 
-  // ✅ paginación
+  // paginación
   paginator = signal(true);
   rows = signal(10);
   rowsPerPageOptions = signal<number[]>([10, 30, 50]);
 
   constructor() {
-    // ✅ si cambia la data, resetea expansiones (evita bugs raros)
     effect(() => {
       this.data(); // track
       this.expandedRowKeys.set({});
+      // opcional: si cambia la data, también limpia selección (depende tu caso)
+      // this.selection.set([]);
     });
   }
 
@@ -46,14 +55,13 @@ export class TableGeneral {
     this.expandedRowKeys.set((keys ?? {}) as Record<string, boolean>);
   }
 
-  // ✅ para calcular colspan en expansión
   getExpandColspan(): number {
     const extraExpand = this.expandable() ? 1 : 0;
+    const extraSelect = this.selectable() ? 1 : 0;
     const extraActions = this.actions().length ? 1 : 0;
-    return this.columns().length + extraExpand + extraActions;
+    return this.columns().length + extraExpand + extraSelect + extraActions;
   }
 
-  // ✅ helper: tiene hijos?
   hasChildren(row: any): boolean {
     const field = this.childrenField();
     return (row?.[field]?.length ?? 0) > 0;

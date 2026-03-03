@@ -4,9 +4,18 @@ export const SOLICITUDEMR_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./pages/list/solicitud-emr-list.page/solicitud-emr-list.page')
+      import('./pages/solicitud-emr-list.page/solicitud-emr-list.page')
         .then(m => m.SolicitudEmrListPage),
   },
+
+  
+  {
+    path: 'ver/:id',
+    loadComponent: () =>
+      import('./pages/solicitud-emr-view.page/solicitud-emr-view.page')
+        .then(m => m.SolicitudEmrViewPage),
+  },
+
   {
     path: 'nuevo',
     loadComponent: () =>
@@ -28,6 +37,7 @@ export const SOLICITUDEMR_ROUTES: Routes = [
       },
     ],
   },
+
   {
     path: 'editar/:id',
     loadComponent: () =>

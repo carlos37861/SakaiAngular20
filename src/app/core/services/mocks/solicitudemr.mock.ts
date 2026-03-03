@@ -1,18 +1,18 @@
 import { ApiResponse } from '@/shared/models/api-response.model';
-import { SolicitudItem } from '@/features/solicitud-emr/interfaces/solicitudemr_item.interface';
+import { SolicitudEmrHeader } from '@/features/solicitud-emr/interfaces/solicitudemr_item.interface';
 
-export const SOLICITUD_ITEM_LIST_MOCK: SolicitudItem[] = [
+export const SOLICITUD_ITEM_LIST_MOCK: SolicitudEmrHeader[] = [
   {
     codigoSolicitud: 'SOL2025000146',
     solicitante: 'Juan Pérez',
     estado: 'Pendiente',
-    fechaSolicitud: new Date('2026-02-20'),
+    fechaSolicitud: '01/05/2024',
     zona: 'Zona Norte',
     labor: 'Labor 102',
-    numeroTaladro: 'T-45',
-    numeroMaquina: 'M-12',
+    nroTaladro: 'T-45',
+    nroMaquina: 'M-12',
     desmonteMineral: 'Mineral',
-    longitudPerforacion: 120,
+    longPerforacion: 120,
     tipoDisparo: 'Primario',
     turno: 'Noche',
     piesPerforados: 350,
@@ -22,13 +22,13 @@ export const SOLICITUD_ITEM_LIST_MOCK: SolicitudItem[] = [
     codigoSolicitud: 'SOL2025000147',
     solicitante: 'Carlos Ramos',
     estado: 'Aprobado',
-    fechaSolicitud: new Date('2026-02-21'),
+    fechaSolicitud: '01/05/2024',
     zona: 'Zona Sur',
     labor: 'Labor 210',
-    numeroTaladro: 'T-22',
-    numeroMaquina: 'M-07',
+    nroTaladro: 'T-22',
+    nroMaquina: 'M-07',
     desmonteMineral: 'Desmonte',
-    longitudPerforacion: 95,
+    longPerforacion: 95,
     tipoDisparo: 'Secundario',
     turno: 'Día',
     piesPerforados: 280,
@@ -36,7 +36,7 @@ export const SOLICITUD_ITEM_LIST_MOCK: SolicitudItem[] = [
   }
 ];
 
-export const SolicitudMockListResponse: ApiResponse<SolicitudItem[]> = {
+export const SolicitudMockListResponse: ApiResponse<SolicitudEmrHeader[]> = {
     IsSuccess: true,
     Result: SOLICITUD_ITEM_LIST_MOCK,
     ErrorMessage: null,
@@ -46,7 +46,7 @@ export const SolicitudMockListResponse: ApiResponse<SolicitudItem[]> = {
     MethodToRepeat: null
 };
 
-export const SolicitudMockResponse: ApiResponse<SolicitudItem> = {
+export const SolicitudMockResponse: ApiResponse<SolicitudEmrHeader> = {
     IsSuccess: true,
     Result: SOLICITUD_ITEM_LIST_MOCK[0],
     ErrorMessage: null,

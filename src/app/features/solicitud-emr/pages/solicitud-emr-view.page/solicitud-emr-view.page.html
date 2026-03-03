@@ -1,0 +1,56 @@
+<h2 class="mb-3">Detalle Solicitud de EMR</h2>
+
+@if (step() === 1) {
+  <app-form-card class="block w-full"></app-form-card>
+}
+
+@if (step() === 2) {
+
+  <!-- CARDS INFO -->
+  <div class="info-grid mb-4">
+    <div class="info-card">
+      <div class="info-text">
+        <div class="info-label">Código</div>
+        <div class="info-value">{{ header()?.codigoSolicitud }}</div>
+      </div>
+      <div class="info-icon">
+        <i class="pi pi-hashtag"></i>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-text">
+        <div class="info-label">Solicitante</div>
+        <div class="info-value">{{ header()?.solicitante }}</div>
+      </div>
+      <div class="info-icon info-icon-green">
+        <i class="pi pi-user"></i>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-text">
+        <div class="info-label">Estado</div>
+        <div class="info-value">{{ header()?.estado }}</div>
+      </div>
+      <div class="info-icon info-icon-orange">
+        <i class="pi pi-verified"></i>
+      </div>
+    </div>
+  </div>
+
+  <p-card>
+    <div class="flex align-items-center mb-3">
+      <h4 class="m-0">Detalle de artículos a solicitar</h4>
+    </div>
+
+    <!-- TABLA -->
+    <app-table-general></app-table-general>
+
+    <!-- FOOTER -->
+    <div class="flex justify-content-start gap-2 mt-4">
+      <button pButton type="button" class="p-button-secondary" (click)="atras()">Atrás</button>
+      <button pButton type="button" class="p-button-danger" (click)="cancelar()">Cancelar</button>
+    </div>
+  </p-card>
+}
